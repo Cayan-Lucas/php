@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status do Servidor</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        .stats {
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+        .stats h2 {
+            margin-bottom: 20px;
+        }
+        .stats div {
+            margin: 10px 0;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Status do Servidor</h1>
+    <div class="stats">
+        <h2>Informações</h2>
+        <div id="cpu">CPU: --%</div>
+        <div id="ram">RAM: -- / -- GB</div>
+    </div>
+
+   <script>
+    async function fetchStats() {
+        const response = await fetch('stats.php');
+        const data = await response.json();
+
+        // Arredondar os valores numéricos para duas casas decimais
+        const cpuUsage = parseFloat(data.cpu).toFixed(2); // CPU em porcentagem
+        const memoryUsed = parseFloat(data.memory_used).toFixed(2); // RAM usada (GB)
+        const memoryTotal = parseFloat(data.memory_total).toFixed(2); // RAM total (GB)
+
+        // Atualizar os elementos na página
+        document.getElementById('cpu').textContent = `CPU: ${cpuUsage}%`;
+        document.getElementById('ram').textContent = `RAM: ${memoryUsed} / ${memoryTotal} GB`;
+    }
+
+    setInterval(fetchStats, 1000); // Atualiza a cada 1 segundo
+    fetchStats(); // Chamada inicial
+</script>
+  
+</body>
+</html>
